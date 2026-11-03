@@ -1,0 +1,366 @@
+/* ==========================================================================
+   Reforma Furniture v2: styles.css
+   Mobile-first: gaya dasar untuk HP, lalu @media (min-width) untuk layar besar.
+   ========================================================================== */
+
+/* 1. Design tokens: ganti nilai di sini untuk mengubah tampilan seluruh situs */
+:root {
+  /* Warna */
+  --color-bg: #F9F6F0;          /* krem hangat */
+  --color-surface: #FFFFFF;
+  --color-surface-alt: #EFEAE1; /* latar foto produk */
+  --color-primary: #4E6655;     /* sage tua: tombol (kontras 6.3:1 dengan putih) */
+  --color-primary-hover: #3F5546;
+  --color-accent: #849C8A;      /* sage asli: hanya untuk dekorasi */
+  --color-wood: #8B5E3C;        /* cokelat kayu: harga & aksen */
+  --color-text: #2C2C2C;
+  --color-text-muted: #5F5A52;
+  --color-dark: #22201D;
+  --color-on-dark: #F4F0E8;
+  --color-on-dark-muted: #C9C2B6;
+  --color-border: #E2DDD3;
+
+  /* Tipografi */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Jarak */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --section-padding: 4rem;
+
+  /* Bentuk & efek */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 1px 3px rgba(34, 32, 29, 0.06);
+  --shadow-md: 0 8px 24px rgba(34, 32, 29, 0.10);
+  --transition: 0.2s ease;
+  --header-height: 4.25rem;
+}
+
+/* 2. Reset ringan */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-height); }
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; max-width: 100%; }
+img { height: auto; }
+ul, ol { padding: 0; list-style: none; }
+a { color: inherit; }
+button { font: inherit; }
+h1, h2, h3 { font-family: var(--font-heading); font-weight: 600; line-height: 1.15; }
+h2 { font-size: clamp(1.75rem, 1.3rem + 2vw, 2.5rem); }
+h3 { font-size: 1.35rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+}
+
+/* 3. Utilitas */
+.container { width: min(100% - 2.5rem, 1120px); margin-inline: auto; }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap;
+}
+.sprite { display: none; }
+.icon { width: 1.25em; height: 1.25em; fill: currentColor; flex-shrink: 0; }
+
+.skip-link {
+  position: absolute; left: var(--space-md); top: -100px; z-index: 200;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-primary); color: #fff; border-radius: var(--radius-sm);
+}
+.skip-link:focus { top: var(--space-md); }
+
+:focus-visible { outline: 3px solid var(--color-wood); outline-offset: 3px; }
+
+.eyebrow {
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--color-primary); margin-bottom: var(--space-sm);
+}
+.eyebrow--light { color: var(--color-on-dark-muted); }
+
+/* 4. Tombol */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  min-height: 48px; padding: 0.75rem 1.4rem;
+  border: 2px solid transparent; border-radius: 999px;
+  font-weight: 600; text-decoration: none; cursor: pointer;
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn--primary { background: var(--color-primary); color: #fff; }
+.btn--primary:hover { background: var(--color-primary-hover); }
+.btn--ghost { border-color: currentColor; color: var(--color-on-dark); background: transparent; }
+.btn--ghost:hover { background: rgba(255, 255, 255, 0.12); }
+.btn--light { background: var(--color-on-dark); color: var(--color-dark); }
+.btn--small { min-height: 44px; padding: 0.5rem 1rem; font-size: 0.925rem; }
+.btn--block { width: 100%; }
+
+.link-arrow {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  font-weight: 600; color: var(--color-primary); text-underline-offset: 4px;
+}
+
+/* 5. Header & navigasi */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(249, 246, 240, 0.94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+.site-header__inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  min-height: var(--header-height); gap: var(--space-sm) var(--space-md);
+}
+.brand { display: inline-flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+.brand__logo { width: auto; height: 2.25rem; }
+.brand__name { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 600; color: var(--color-text); }
+.brand--light .brand__logo { filter: invert(1); }
+.brand--light .brand__name { color: var(--color-on-dark); }
+
+.menu-toggle { display: none; }
+
+.site-nav {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-xs) var(--space-lg);
+  padding-bottom: var(--space-sm);
+}
+.site-nav a:not(.btn) {
+  font-weight: 600; font-size: 0.95rem; text-decoration: none; padding-block: 0.5rem;
+  color: var(--color-text);
+}
+.site-nav a:not(.btn):hover { color: var(--color-primary); text-decoration: underline; text-underline-offset: 6px; }
+
+/* Saat JavaScript aktif, menu di HP disembunyikan di balik tombol ☰ */
+.js .menu-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border: 0; border-radius: var(--radius-sm);
+  background: transparent; color: var(--color-text); cursor: pointer;
+}
+.js .menu-toggle .icon { width: 1.75rem; height: 1.75rem; }
+.js .site-nav {
+  display: none; width: 100%; flex-direction: column; align-items: stretch;
+  padding: var(--space-sm) 0 var(--space-lg); gap: 0;
+}
+.js .site-nav.is-open { display: flex; }
+.js .site-nav a:not(.btn) { padding: 0.85rem 0; border-bottom: 1px solid var(--color-border); }
+.js .site-nav .btn { margin-top: var(--space-md); }
+
+@media (min-width: 900px) {
+  .js .menu-toggle { display: none; }
+  .js .site-nav, .site-nav {
+    display: flex; width: auto; flex-direction: row; align-items: center;
+    gap: var(--space-xl); padding: 0;
+  }
+  .js .site-nav a:not(.btn) { padding: 0.5rem 0; border: 0; }
+  .js .site-nav .btn { margin-top: 0; }
+}
+
+/* 6. Hero */
+.hero {
+  position: relative; isolation: isolate;
+  display: flex; align-items: flex-end;
+  min-height: min(88svh, 760px);
+  padding-block: var(--space-2xl) var(--space-xl);
+  color: var(--color-on-dark);
+  background: var(--color-dark);
+  overflow: hidden;
+}
+.hero__img {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; object-fit: cover; object-position: center 70%;
+}
+.hero::after {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to top, rgba(20, 18, 16, 0.88) 0%, rgba(20, 18, 16, 0.45) 55%, rgba(20, 18, 16, 0.15) 100%);
+}
+.hero h1 {
+  font-size: clamp(2rem, 1.4rem + 3.2vw, 3.6rem);
+  max-width: 16ch; margin-bottom: var(--space-md);
+}
+.hero__lead { max-width: 46ch; font-size: 1.075rem; color: var(--color-on-dark); opacity: 0.92; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-lg); }
+
+/* 7. Section umum */
+.section { padding-block: var(--section-padding); }
+.section--white { background: var(--color-surface); }
+.section--dark { background: var(--color-dark); color: var(--color-on-dark); }
+.section--dark h2 { color: var(--color-on-dark); }
+.section__header { max-width: 40rem; margin-bottom: var(--space-xl); }
+.section__header p:not(.eyebrow) { margin-top: var(--space-sm); color: var(--color-text-muted); }
+
+/* 8. Produk */
+.products { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-2xl); }
+.product {
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-lg);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+.gallery__main {
+  aspect-ratio: 1 / 1; border-radius: var(--radius-md); overflow: hidden;
+  background: var(--color-surface-alt);
+}
+.gallery__main img { width: 100%; height: 100%; object-fit: contain; }
+.gallery__thumbs {
+  display: flex; gap: var(--space-xs); margin-top: var(--space-sm);
+  overflow-x: auto; padding-bottom: 4px;
+}
+.gallery__thumbs a {
+  display: block; width: 64px; height: 64px; flex-shrink: 0;
+  border-radius: var(--radius-sm); overflow: hidden;
+  border: 2px solid transparent; opacity: 0.7;
+  transition: opacity var(--transition), border-color var(--transition);
+}
+.gallery__thumbs a:hover, .gallery__thumbs a[aria-current="true"] { opacity: 1; border-color: var(--color-primary); }
+.gallery__thumbs img { width: 100%; height: 100%; object-fit: cover; }
+
+.product__info { display: flex; flex-direction: column; gap: var(--space-sm); padding: 0 var(--space-xs) var(--space-xs); }
+.tag {
+  align-self: flex-start;
+  font-size: 0.8rem; font-weight: 600;
+  padding: 0.3rem 0.75rem; border-radius: 999px;
+  background: rgba(132, 156, 138, 0.18); color: var(--color-primary);
+}
+.product__info h3 { font-size: 1.75rem; }
+.product__price { font-size: 1.5rem; font-weight: 600; color: var(--color-wood); }
+.product__info > p:not(.tag):not(.product__price):not(.note) { color: var(--color-text-muted); }
+
+.specs { display: grid; gap: var(--space-sm); margin-block: var(--space-xs) var(--space-sm); }
+.specs > div {
+  display: grid; grid-template-columns: 6.75rem 1fr; gap: var(--space-sm);
+  padding-top: var(--space-sm); border-top: 1px solid var(--color-border);
+}
+.specs dt { display: flex; align-items: center; gap: 0.45rem; font-weight: 600; }
+.specs dt .icon { color: var(--color-accent); }
+.specs dd { color: var(--color-text-muted); }
+
+.note { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: var(--color-text-muted); }
+.note .icon { width: 1rem; height: 1rem; }
+
+@media (min-width: 960px) {
+  .product { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: var(--space-xl); padding: var(--space-lg); align-items: center; }
+  .product:nth-child(even) .gallery { order: 2; }
+  .gallery__thumbs a { width: 76px; height: 76px; }
+}
+
+/* 9. Langkah membeli */
+.steps { display: grid; gap: var(--space-lg); counter-reset: step; }
+.step { position: relative; padding: var(--space-lg); border-radius: var(--radius-md); background: var(--color-bg); }
+.step::before {
+  counter-increment: step; content: '0' counter(step);
+  position: absolute; top: var(--space-lg); right: var(--space-lg);
+  font-family: var(--font-heading); font-size: 1.5rem; color: var(--color-accent);
+}
+.step__icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 3rem; height: 3rem; border-radius: 50%; margin-bottom: var(--space-md);
+  background: rgba(132, 156, 138, 0.18); color: var(--color-primary);
+}
+.step__icon .icon { width: 1.5rem; height: 1.5rem; }
+.step h3 { margin-bottom: var(--space-xs); font-size: 1.2rem; }
+.step p { color: var(--color-text-muted); }
+
+@media (min-width: 640px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .steps { grid-template-columns: repeat(4, 1fr); } }
+
+/* 10. Tentang & Segera hadir */
+.about { display: grid; gap: var(--space-xl); }
+.about__text h2 { margin-bottom: var(--space-md); }
+.about__text p + p { margin-top: var(--space-md); }
+.about__text p:not(.eyebrow) { color: var(--color-text-muted); }
+.soon {
+  padding: var(--space-lg); border-radius: var(--radius-lg);
+  border: 1px dashed var(--color-accent); background: var(--color-surface);
+}
+.soon h3 { margin-bottom: var(--space-md); }
+.soon__list { display: grid; gap: var(--space-md); margin-bottom: var(--space-lg); }
+.soon__list li { display: flex; gap: var(--space-md); }
+.soon__list p { color: var(--color-text-muted); font-size: 0.95rem; }
+.soon__icon {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 2.5rem; height: 2.5rem; border-radius: 50%;
+  background: rgba(139, 94, 60, 0.12); color: var(--color-wood);
+}
+
+@media (min-width: 900px) { .about { grid-template-columns: 1.3fr 1fr; align-items: center; gap: var(--space-2xl); } }
+
+/* 11. Kontak */
+.contact { display: grid; gap: var(--space-xl); }
+.contact h2 { margin-bottom: var(--space-lg); }
+.contact__list { display: grid; gap: var(--space-md); }
+.contact__list li { display: flex; gap: var(--space-sm); align-items: flex-start; color: var(--color-on-dark-muted); }
+.contact__list .icon { margin-top: 0.2rem; color: var(--color-accent); }
+.contact__list address { font-style: normal; }
+.contact__list a { color: var(--color-on-dark); text-underline-offset: 4px; }
+
+.map {
+  position: relative; display: grid; place-content: center; justify-items: center; gap: var(--space-sm);
+  min-height: 300px; padding: var(--space-lg); text-align: center;
+  border-radius: var(--radius-lg); overflow: hidden;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(132, 156, 138, 0.25), transparent 50%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0 2px, transparent 2px 22px),
+    #2E2B27;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.map__pin { width: 2.5rem; height: 2.5rem; color: var(--color-accent); }
+.map__actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-sm); margin-top: var(--space-xs); }
+.map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+@media (min-width: 900px) { .contact { grid-template-columns: 1fr 1fr; align-items: center; } }
+
+/* 12. Footer */
+.site-footer { background: #1A1816; color: var(--color-on-dark-muted); padding-block: var(--space-xl) 6rem; }
+.site-footer__inner { display: grid; gap: var(--space-lg); justify-items: center; text-align: center; }
+.socials { display: flex; gap: var(--space-sm); }
+.socials a {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08); color: var(--color-on-dark);
+  transition: background-color var(--transition);
+}
+.socials a:hover { background: var(--color-primary); }
+.site-footer__copy { font-size: 0.875rem; }
+
+@media (min-width: 900px) {
+  .site-footer { padding-bottom: var(--space-xl); }
+  .site-footer__inner { grid-template-columns: auto 1fr auto; justify-items: start; text-align: left; }
+  .socials { justify-self: center; }
+}
+
+/* 13. Tombol WhatsApp melayang */
+.wa-float {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 90;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--color-primary); color: #fff;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition), background-color var(--transition);
+}
+.wa-float:hover { transform: scale(1.06); background: var(--color-primary-hover); }
+.wa-float .icon { width: 1.75rem; height: 1.75rem; }
+
+/* 14. Layar besar: jarak antar section lebih lega */
+@media (min-width: 900px) {
+  :root { --section-padding: 6rem; --header-height: 4.75rem; }
+  .hero { padding-block: 6rem; align-items: center; }
+  .hero__img { object-position: center; }
+  .hero::after { background: linear-gradient(to right, rgba(20, 18, 16, 0.85) 0%, rgba(20, 18, 16, 0.55) 45%, rgba(20, 18, 16, 0.1) 75%); }
+  .hero h1 { max-width: 18ch; }
+}
